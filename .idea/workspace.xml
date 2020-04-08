@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="30c4db85-e912-4792-b506-d495982c2c12" name="Default Changelist" comment="Added remove room functionality, validation on add room">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/AddRoomGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/AddRoomGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/BookRoomGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/BookRoomGUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/BookRoomGUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/BookRoomGUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/BookRoomGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/BookRoomGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/Booking.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/Booking.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/ClerkGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/ClerkGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/LaunchObserver.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/LaunchObserver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/asd/ManagerGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/asd/ManagerGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AddRoomGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AddRoomGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BookRoomGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BookRoomGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ClerkGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClerkGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LaunchObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LaunchObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="155" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1Zzr08JcdKIvZpaanDqvO2a5YIq" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../untitled" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunManager">
+    <configuration name="LaunchObserver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="LaunchObserver" />
+      <module name="asd" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.LaunchObserver" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="30c4db85-e912-4792-b506-d495982c2c12" name="Default Changelist" comment="" />
+      <created>1585852537308</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585852537308</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added remove room functionality, validation on add room" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added remove room functionality, validation on add room" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="87" y="214" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585855246532">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="87" y="214" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1585855246532" />
+    <state x="381" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1586017306570">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="381" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1586017306570" />
+    <state x="1307" y="250" key="CommitChangelistDialog2" timestamp="1585934795738">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="1307" y="250" key="CommitChangelistDialog2/0.0.2048.1112@0.0.2048.1112" timestamp="1585934795738" />
+    <state x="412" y="314" key="FileChooserDialogImpl" timestamp="1586178639677">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="412" y="314" key="FileChooserDialogImpl/0.0.2048.1112@0.0.2048.1112" timestamp="1586178639677" />
+    <state width="1356" height="170" key="GridCell.Tab.0.bottom" timestamp="1586375898776">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1356" height="170" key="GridCell.Tab.0.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1586375898776" />
+    <state width="1356" height="170" key="GridCell.Tab.0.center" timestamp="1586375898775">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1356" height="170" key="GridCell.Tab.0.center/0.0.2048.1112@0.0.2048.1112" timestamp="1586375898775" />
+    <state width="1356" height="170" key="GridCell.Tab.0.left" timestamp="1586375898775">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1356" height="170" key="GridCell.Tab.0.left/0.0.2048.1112@0.0.2048.1112" timestamp="1586375898775" />
+    <state width="1356" height="170" key="GridCell.Tab.0.right" timestamp="1586375898776">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1356" height="170" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1586375898776" />
+    <state width="1232" height="260" key="GridCell.Tab.1.bottom" timestamp="1586106823858">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1232" height="260" key="GridCell.Tab.1.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1586106823858" />
+    <state width="1232" height="260" key="GridCell.Tab.1.center" timestamp="1586106823858">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1232" height="260" key="GridCell.Tab.1.center/0.0.2048.1112@0.0.2048.1112" timestamp="1586106823858" />
+    <state width="1232" height="260" key="GridCell.Tab.1.left" timestamp="1586106823858">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1232" height="260" key="GridCell.Tab.1.left/0.0.2048.1112@0.0.2048.1112" timestamp="1586106823858" />
+    <state width="1232" height="260" key="GridCell.Tab.1.right" timestamp="1586106823858">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1232" height="260" key="GridCell.Tab.1.right/0.0.2048.1112@0.0.2048.1112" timestamp="1586106823858" />
+    <state x="116" y="133" key="SettingsEditor" timestamp="1586022173279">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="116" y="133" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1586022173279" />
+    <state x="-6" y="0" width="1498" height="1112" key="new project wizard" timestamp="1586178379520">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="-6" y="0" width="1498" height="1112" key="new project wizard/0.0.2048.1112@0.0.2048.1112" timestamp="1586178379520" />
+    <state x="395" y="178" key="refactoring.ChangeSignatureDialog" timestamp="1585919741873">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="395" y="178" key="refactoring.ChangeSignatureDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1585919741873" />
+    <state x="169" y="262" key="run.anything.popup" timestamp="1586186583510">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="169" y="262" key="run.anything.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1586186583510" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/RoomTable.java</url>
+          <line>48</line>
+          <properties class="RoomTable" method="getRoomFromTable">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/asd$LaunchObserver.ic" NAME="LaunchObserver Coverage Results" MODIFIED="1586099205731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/ASD_CW$LaunchObserver.ic" NAME="LaunchObserver Coverage Results" MODIFIED="1585853410133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
