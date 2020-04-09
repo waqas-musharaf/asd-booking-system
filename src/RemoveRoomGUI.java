@@ -9,20 +9,30 @@ public class RemoveRoomGUI extends javax.swing.JFrame implements Runnable, Obser
     private javax.swing.JTextField tfRoomID;
 
     private RoomTable roomTable;
+    private BookingTable bookingTable;
+    private TermTable termTable;
 
     @Override
     public void run() {
         this.setVisible(true);
     }
 
-    public RemoveRoomGUI(RoomTable tableState) {
+    public RemoveRoomGUI(RoomTable rTable, BookingTable bTable, TermTable tTable) {
         super();
 
-        roomTable = tableState;
+        roomTable = rTable;
         roomTable.addObserver(this);
 
+        bookingTable = bTable;
+        bookingTable.addObserver(this);
+
+        termTable = tTable;
+        termTable.addObserver(this);
+
         initGUI();
-        updateSharedTable();
+        updateRoomTable();
+        updateBookingTable();
+        updateTermTable();
     }
 
     private void initGUI() {
@@ -124,12 +134,21 @@ public class RemoveRoomGUI extends javax.swing.JFrame implements Runnable, Obser
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // the method called when the shared table changes - updates the GUI if required
-        updateSharedTable();
+        updateRoomTable();
+        updateBookingTable();
+        updateTermTable();
     }
 
-    private void updateSharedTable() {
+    private void updateRoomTable() {
         roomTable.equals(roomTable.getTable());
+    }
+
+    private void updateBookingTable() {
+        bookingTable.equals(bookingTable.getTable());
+    }
+
+    private void updateTermTable() {
+        termTable.equals(termTable.getTable());
     }
 
     public int intTryParse(String value, int defaultValue) {

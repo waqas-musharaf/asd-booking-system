@@ -17,13 +17,14 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
 
     private RoomTable roomTable;
     private BookingTable bookingTable;
+    private TermTable termTable;
 
     @Override
     public void run() {
         this.setVisible(true);
     }
 
-    public ClerkGUI(RoomTable rTable, BookingTable bTable) {
+    public ClerkGUI(RoomTable rTable, BookingTable bTable, TermTable tTable) {
         super();
 
         roomTable = rTable;
@@ -32,9 +33,13 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
         bookingTable = bTable;
         bookingTable.addObserver(this);
 
+        termTable = tTable;
+        termTable.addObserver(this);
+
         initGUI();
         updateRoomTable();
         updateBookingTable();
+        updateTermTable();
     }
 
     private void initGUI() {
@@ -162,18 +167,18 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
     }
 
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {
-        new BookRoomGUI(bookingTable).setVisible(true);
+        new BookRoomGUI(roomTable, bookingTable, termTable).setVisible(true);
     }
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {
-        new DeleteBookingGUI(bookingTable).setVisible(true);
+        new DeleteBookingGUI(roomTable, bookingTable, termTable).setVisible(true);
     }
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // the method called when the shared table changes - updates the GUI
         updateRoomTable();
         updateBookingTable();
+        updateTermTable();
     }
 
     private void updateRoomTable() {
@@ -206,5 +211,9 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
             dtm.addRow(rowData);
         }
         tblBookings = new JTable(dtm);
+    }
+
+    private void updateTermTable() {
+        termTable.equals(termTable.getTable());
     }
 }

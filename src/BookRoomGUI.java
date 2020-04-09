@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.*;
 
 public class BookRoomGUI extends javax.swing.JFrame implements Runnable, Observer {
@@ -26,21 +25,31 @@ public class BookRoomGUI extends javax.swing.JFrame implements Runnable, Observe
     private javax.swing.JTextField tfRoomID;
     private JDatePickerImpl dpDate;
 
+    private RoomTable roomTable;
     private BookingTable bookingTable;
+    private TermTable termTable;
 
     @Override
     public void run() {
         this.setVisible(true);
     }
 
-    public BookRoomGUI(BookingTable tableState) {
+    public BookRoomGUI(RoomTable rTable, BookingTable bTable, TermTable tTable) {
         super();
 
-        bookingTable = tableState;
+        roomTable = rTable;
+        roomTable.addObserver(this);
+
+        bookingTable = bTable;
         bookingTable.addObserver(this);
 
+        termTable = tTable;
+        termTable.addObserver(this);
+
         initGUI();
-        updateSharedTable();
+        updateRoomTable();
+        updateBookingTable();
+        updateTermTable();
     }
 
     private void initGUI() {
@@ -197,70 +206,127 @@ public class BookRoomGUI extends javax.swing.JFrame implements Runnable, Observe
                     JOptionPane.ERROR_MESSAGE);
         } else {
             int roomID = intTryParse(tfRoomID.getText(), Integer.MIN_VALUE);
-
-            //date.getMonth() returns a value between 0 and 11, not 1-12; +1 as a workaround
-            //date.getDay() however, returns a value between 1 and 31. Very weird...
-            LocalDate lDate = LocalDate.of(dpDate.getModel().getYear(),
-                    dpDate.getModel().getMonth() + 1,
-                    dpDate.getModel().getDay());
-
-            LocalTime lTime = LocalTime.MIN;
-
-            if (cbTime.getSelectedIndex() == 0) {
-                lTime = lTime.plusHours(9);
-            } else if (cbTime.getSelectedIndex()== 1) {
-                lTime = lTime.plusHours(16);
-            }
-
-            LocalDateTime dateTime = LocalDateTime.of(lDate, lTime);
-
-            if (roomID == Integer.MIN_VALUE) {
+            if (roomTable.getRoomFromTable(roomID) == null) {
                 JOptionPane.showMessageDialog(null,
-                        "Error: Room ID is invalid. Please try again.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            } else if (dateTime.compareTo(LocalDateTime.now()) < 0) {
-                JOptionPane.showMessageDialog(null,
-                        "Error: Date is invalid. Booking date cannot be before current date. Please try again.",
+                        "Error: Room ID does not exist. Please try again.",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-                int id = 1;
-                Booking maxId;
-
-                try {
-                    maxId = Collections.max(bookingTable.getTable(), Comparator.comparing(Booking::getBookingId));
-                } catch (NoSuchElementException e) {
-                    maxId = null;
+                //date.getMonth() returns a value between 0 and 11, not 1-12; +1 as a workaround
+                //date.getDay() however, returns a value between 1 and 31. Very weird...
+                LocalDate lDate = LocalDate.of(dpDate.getModel().getYear(),
+                        dpDate.getModel().getMonth() + 1,
+                        dpDate.getModel().getDay());
+                LocalTime lTime = LocalTime.MIN;
+                if (cbTime.getSelectedIndex() == 0) {
+                    lTime = lTime.plusHours(9);
+                } else if (cbTime.getSelectedIndex() == 1) {
+                    lTime = lTime.plusHours(16);
                 }
+                LocalDateTime dateTime = LocalDateTime.of(lDate, lTime);
+                if (dateTime.compareTo(LocalDateTime.now()) < 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error: Date/Time is invalid. Booking date/time cannot be before current date/time. Please try again.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    boolean available = false;
+                    // Check if weekend
+                    if (dateTime.getDayOfWeek().getValue() == 6 || dateTime.getDayOfWeek().getValue() == 7) {
+                        // Check if AM
+                        if (cbTime.getSelectedIndex() == 0) {
+                            // Check if room is available on weekend AMs
+                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekend AM")) {
+                                available = true;
+                            }
+                        }
+                        // Check if PM
+                        else if (cbTime.getSelectedIndex() == 1) {
+                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekend PM")) {
+                                available = true;
+                            }
+                        }
+                    }
+                    // Check if term time
+                    else if (termTable.hasDate(lDate)) {
+                        // Only check if PM - Term time AM is not bookable
+                        if (cbTime.getSelectedIndex() == 1) {
+                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekday PM")) {
+                                available = true;
+                            }
+                        }
+                    }
+                    // Else is holiday
+                    else {
+                        if (cbTime.getSelectedIndex() == 0) {
+                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Holiday AM")) {
+                                available = true;
+                            }
+                        } else if (cbTime.getSelectedIndex() == 1) {
+                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Holiday PM")) {
+                                available = true;
+                            }
+                        }
+                    }
+                    if (!available) {
+                        JOptionPane.showMessageDialog(null,
+                                "Error: Room is not available at this Date/Time. Cannot book room.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        if (bookingTable.checkBookingExists(roomID, dateTime)) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Error: Room is already booked at this Date/Time. Cannot book room.",
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            int id = 1;
+                            Booking maxId;
+                            try {
+                                maxId = Collections.max(bookingTable.getTable(), Comparator.comparing(Booking::getBookingId));
+                            } catch (NoSuchElementException e) {
+                                maxId = null;
+                            }
+                            if (maxId != null) {
+                                id = maxId.bookingId + 1;
+                            }
 
-                if (maxId != null) {
-                    id = maxId.bookingId + 1;
+                            Booking booking = new Booking(
+                                    id,
+                                    roomID,
+                                    dateTime,
+                                    tfName.getText(),
+                                    tfContact.getText(),
+                                    tfNotes.getText());
+
+                            bookingTable.addBookingToTable(booking);
+                            this.dispose();
+                        }
+                    }
                 }
-
-                Booking booking = new Booking(
-                        id,
-                        roomID,
-                        dateTime,
-                        tfName.getText(),
-                        tfContact.getText(),
-                        tfNotes.getText());
-
-                bookingTable.addBookingToTable(booking);
-                this.dispose();
             }
         }
     }
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // the method called when the shared table changes - updates the GUI if required
-        updateSharedTable();
+        updateRoomTable();
+        updateBookingTable();
+        updateTermTable();
     }
 
-    private void updateSharedTable() {
+    private void updateRoomTable() {
+        roomTable.equals(roomTable.getTable());
+    }
+
+    private void updateBookingTable() {
         bookingTable.equals(bookingTable.getTable());
     }
+
+    private void updateTermTable() {
+        termTable.equals(termTable.getTable());
+    }
+
 
     public int intTryParse(String value, int defaultValue) {
         try {

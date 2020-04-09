@@ -17,20 +17,30 @@ public class AddRoomGUI extends javax.swing.JFrame implements Runnable, Observer
     private javax.swing.JTextField tfSize;
 
     private RoomTable roomTable;
+    private BookingTable bookingTable;
+    private TermTable termTable;
 
     @Override
     public void run() {
         this.setVisible(true);
     }
 
-    public AddRoomGUI(RoomTable tableState) {
+    public AddRoomGUI(RoomTable rTable, BookingTable bTable, TermTable tTable) {
         super();
 
-        roomTable = tableState;
+        roomTable = rTable;
         roomTable.addObserver(this);
 
+        bookingTable = bTable;
+        bookingTable.addObserver(this);
+
+        termTable = tTable;
+        termTable.addObserver(this);
+
         initGUI();
-        updateSharedTable();
+        updateRoomTable();
+        updateBookingTable();
+        updateTermTable();
     }
 
     private void initGUI() {
@@ -60,7 +70,7 @@ public class AddRoomGUI extends javax.swing.JFrame implements Runnable, Observer
         tfAvailability.setText("Click button to fill");
         tfAvailability.setEditable(false);
 
-        btnAvailability.setText("▼");
+        btnAvailability.setText("...");
         btnAvailability.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAvailabilityActionPerformed(evt);
@@ -150,20 +160,18 @@ public class AddRoomGUI extends javax.swing.JFrame implements Runnable, Observer
     }
 
     private void btnAvailabilityActionPerformed(java.awt.event.ActionEvent evt) {
-        String[] options = new String[] {"Term Time Weekday PM", "Weekend AM", "Weekend PM", "Holiday AM", "Holiday PM"};
+        String[] options = new String[]{"Weekday PM", "Weekend AM", "Weekend PM", "Holiday AM", "Holiday PM"};
         JCheckBox[] checkBoxes = new JCheckBox[options.length];
-
         JPanel panel = new JPanel(new GridLayout(options.length, 1));
 
         for (int i = 0; i < options.length; i++) {
             checkBoxes[i] = new JCheckBox(options[i]);
         }
-
         for (JCheckBox c : checkBoxes) {
             panel.add(c);
         }
 
-        int input = JOptionPane.showConfirmDialog(null, panel, "Availability" , JOptionPane.OK_CANCEL_OPTION);
+        int input = JOptionPane.showConfirmDialog(null, panel, "Availability", JOptionPane.OK_CANCEL_OPTION);
         ArrayList<String> selected = new ArrayList<String>();
 
         if (input == 0) {
@@ -172,7 +180,6 @@ public class AddRoomGUI extends javax.swing.JFrame implements Runnable, Observer
                     selected.add(options[i]);
                 }
             }
-
             if (selected.size() > 0) {
                 tfAvailability.setText(selected.stream().collect(Collectors.joining(";")));
             } else if (selected.size() == 0) {
@@ -268,12 +275,21 @@ public class AddRoomGUI extends javax.swing.JFrame implements Runnable, Observer
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // the method called when the shared table changes - updates the GUI if required
-        updateSharedTable();
+        updateRoomTable();
+        updateBookingTable();
+        updateTermTable();
     }
 
-    private void updateSharedTable() {
+    private void updateRoomTable() {
         roomTable.equals(roomTable.getTable());
+    }
+
+    private void updateBookingTable() {
+        bookingTable.equals(bookingTable.getTable());
+    }
+
+    private void updateTermTable() {
+        termTable.equals(termTable.getTable());
     }
 
     public int intTryParse(String value, int defaultValue) {

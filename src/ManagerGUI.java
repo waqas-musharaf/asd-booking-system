@@ -19,13 +19,14 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
 
     private RoomTable roomTable;
     private BookingTable bookingTable;
+    private TermTable termTable;
 
     @Override
     public void run() {
         this.setVisible(true);
     }
 
-    public ManagerGUI(RoomTable rTable, BookingTable bTable) {
+    public ManagerGUI(RoomTable rTable, BookingTable bTable, TermTable tTable) {
         super();
 
         roomTable = rTable;
@@ -34,9 +35,13 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
         bookingTable = bTable;
         bookingTable.addObserver(this);
 
+        termTable = tTable;
+        termTable.addObserver(this);
+
         initGUI();
         updateRoomTable();
         updateBookingTable();
+        updateTermTable();
     }
 
     private void initGUI() {
@@ -122,7 +127,12 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
                 btnRemoveActionPerformed(evt);
             }
         });
-        btnTermDates.setText("Add Term Dates");
+        btnTermDates.setText("Configure Term Dates");
+        btnTermDates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTermDatesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -176,18 +186,22 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
     }
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {
-        new AddRoomGUI(roomTable).setVisible(true);
+        new AddRoomGUI(roomTable, bookingTable, termTable).setVisible(true);
     }
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {
-        new RemoveRoomGUI(roomTable).setVisible(true);
+        new RemoveRoomGUI(roomTable, bookingTable, termTable).setVisible(true);
+    }
+
+    private void btnTermDatesActionPerformed(java.awt.event.ActionEvent evt) {
+        new TermDatesGUI(roomTable, bookingTable, termTable).setVisible(true);
     }
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        // the method called when the shared table changes - updates the GUI
         updateRoomTable();
         updateBookingTable();
+        updateTermTable();
     }
 
     private void updateRoomTable() {
@@ -220,5 +234,9 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
             dtm.addRow(rowData);
         }
         tblBookings = new JTable(dtm);
+    }
+
+    private void updateTermTable() {
+        termTable.equals(termTable.getTable());
     }
 }
