@@ -248,7 +248,9 @@ public class AddRoomGUI extends javax.swing.JFrame implements Runnable, Observer
                                 roomSize,
                                 cbType.getSelectedItem().toString(),
                                 tfAvailability.getText(),
-                                "Available"
+                                "Normal",
+                                Collections.EMPTY_LIST
+
                         );
                         roomTable.addRoomToTable(room);
                         this.dispose();
@@ -264,7 +266,8 @@ public class AddRoomGUI extends javax.swing.JFrame implements Runnable, Observer
                             roomSize,
                             cbType.getSelectedItem().toString(),
                             tfAvailability.getText(),
-                            "Available"
+                            "Normal",
+                            Collections.EMPTY_LIST
                     );
                     roomTable.addRoomToTable(room);
                     this.dispose();

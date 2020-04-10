@@ -230,77 +230,84 @@ public class BookRoomGUI extends javax.swing.JFrame implements Runnable, Observe
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 } else {
-                    boolean available = false;
-                    // Check if weekend
-                    if (dateTime.getDayOfWeek().getValue() == 6 || dateTime.getDayOfWeek().getValue() == 7) {
-                        // Check if AM
-                        if (cbTime.getSelectedIndex() == 0) {
-                            // Check if room is available on weekend AMs
-                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekend AM")) {
-                                available = true;
-                            }
-                        }
-                        // Check if PM
-                        else if (cbTime.getSelectedIndex() == 1) {
-                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekend PM")) {
-                                available = true;
-                            }
-                        }
-                    }
-                    // Check if term time
-                    else if (termTable.hasDate(lDate)) {
-                        // Only check if PM - Term time AM is not bookable
-                        if (cbTime.getSelectedIndex() == 1) {
-                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekday PM")) {
-                                available = true;
-                            }
-                        }
-                    }
-                    // Else is holiday
-                    else {
-                        if (cbTime.getSelectedIndex() == 0) {
-                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Holiday AM")) {
-                                available = true;
-                            }
-                        } else if (cbTime.getSelectedIndex() == 1) {
-                            if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Holiday PM")) {
-                                available = true;
-                            }
-                        }
-                    }
-                    if (!available) {
+                    if (roomTable.getRoomFromTable(roomID).getUnavailability().contains(lDate)) {
                         JOptionPane.showMessageDialog(null,
-                                "Error: Room is not available at this Date/Time. Cannot book room.",
+                                "Error: Room is set as unavailable on this day. Cannot book room.",
                                 "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     } else {
-                        if (bookingTable.checkBookingExists(roomID, dateTime)) {
+                        boolean available = false;
+                        // Check if weekend
+                        if (dateTime.getDayOfWeek().getValue() == 6 || dateTime.getDayOfWeek().getValue() == 7) {
+                            // Check if AM
+                            if (cbTime.getSelectedIndex() == 0) {
+                                // Check if room is available on weekend AMs
+                                if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekend AM")) {
+                                    available = true;
+                                }
+                            }
+                            // Check if PM
+                            else if (cbTime.getSelectedIndex() == 1) {
+                                if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekend PM")) {
+                                    available = true;
+                                }
+                            }
+                        }
+                        // Check if term time
+                        else if (termTable.hasDate(lDate)) {
+                            // Only check if PM - Term time AM is not bookable
+                            if (cbTime.getSelectedIndex() == 1) {
+                                if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Weekday PM")) {
+                                    available = true;
+                                }
+                            }
+                        }
+                        // Else is holiday
+                        else {
+                            if (cbTime.getSelectedIndex() == 0) {
+                                if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Holiday AM")) {
+                                    available = true;
+                                }
+                            } else if (cbTime.getSelectedIndex() == 1) {
+                                if (roomTable.getRoomFromTable(roomID).getAvailability().contains("Holiday PM")) {
+                                    available = true;
+                                }
+                            }
+                        }
+                        if (!available) {
                             JOptionPane.showMessageDialog(null,
-                                    "Error: Room is already booked at this Date/Time. Cannot book room.",
+                                    "Error: Room is not available at this Date/Time. Cannot book room.",
                                     "Error",
                                     JOptionPane.ERROR_MESSAGE);
                         } else {
-                            int id = 1;
-                            Booking maxId;
-                            try {
-                                maxId = Collections.max(bookingTable.getTable(), Comparator.comparing(Booking::getBookingId));
-                            } catch (NoSuchElementException e) {
-                                maxId = null;
-                            }
-                            if (maxId != null) {
-                                id = maxId.bookingId + 1;
-                            }
+                            if (bookingTable.checkBookingExists(roomID, dateTime)) {
+                                JOptionPane.showMessageDialog(null,
+                                        "Error: Room is already booked at this Date/Time. Cannot book room.",
+                                        "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                int id = 1;
+                                Booking maxId;
+                                try {
+                                    maxId = Collections.max(bookingTable.getTable(), Comparator.comparing(Booking::getBookingId));
+                                } catch (NoSuchElementException e) {
+                                    maxId = null;
+                                }
+                                if (maxId != null) {
+                                    id = maxId.bookingId + 1;
+                                }
 
-                            Booking booking = new Booking(
-                                    id,
-                                    roomID,
-                                    dateTime,
-                                    tfName.getText(),
-                                    tfContact.getText(),
-                                    tfNotes.getText());
+                                Booking booking = new Booking(
+                                        id,
+                                        roomID,
+                                        dateTime,
+                                        tfName.getText(),
+                                        tfContact.getText(),
+                                        tfNotes.getText());
 
-                            bookingTable.addBookingToTable(booking);
-                            this.dispose();
+                                bookingTable.addBookingToTable(booking);
+                                this.dispose();
+                            }
                         }
                     }
                 }

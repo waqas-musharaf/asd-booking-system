@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -115,7 +114,7 @@ public class TermDatesGUI extends javax.swing.JFrame implements Runnable, Observ
     }
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {
-        DateRangeGUI addDates = new DateRangeGUI();
+        DateRangePanel addDates = new DateRangePanel();
         int input = JOptionPane.showConfirmDialog(null, addDates, "Add Term Dates" , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
         if (input == 0) {
             List<LocalDate> dateRange = addDates.returnDateRange();
@@ -130,7 +129,7 @@ public class TermDatesGUI extends javax.swing.JFrame implements Runnable, Observ
     }
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {
-        DateRangeGUI removeDates = new DateRangeGUI();
+        DateRangePanel removeDates = new DateRangePanel();
         int input = JOptionPane.showConfirmDialog(null, removeDates, "Remove Term Dates" , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
         if (input == 0) {
             List<LocalDate> dateRange = removeDates.returnDateRange();

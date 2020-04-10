@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -60,5 +61,18 @@ public class RoomTable extends Observable {
         } else {
             return returnedRooms.get(0);
         }
+    }
+
+    public void updateUnavailability(int roomId, String status, List<LocalDate> unavailability) {
+        Room room = getRoomFromTable(roomId);
+        Room updatedRoom = new Room(room.roomId,
+                room.roomName,
+                room.size,
+                room.type,
+                room.availability,
+                status,
+                unavailability);
+        removeRoomFromTable(room);
+        addRoomToTable(updatedRoom);
     }
 }

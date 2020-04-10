@@ -6,10 +6,11 @@ import java.util.Observer;
 
 public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer {
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnAvailability;
+    private javax.swing.JButton btnChangeAvailability;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnTermDates;
+    private javax.swing.JButton btnViewAvailability;
     private javax.swing.JLabel lblBookings;
     private javax.swing.JLabel lblRooms;
     private javax.swing.JScrollPane spBookings;
@@ -46,10 +47,11 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
 
     private void initGUI() {
         btnAdd = new javax.swing.JButton();
-        btnAvailability = new javax.swing.JButton();
+        btnChangeAvailability = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
         btnTermDates = new javax.swing.JButton();
+        btnViewAvailability = new javax.swing.JButton();
         lblBookings = new javax.swing.JLabel();
         lblRooms = new javax.swing.JLabel();
         spBookings = new javax.swing.JScrollPane();
@@ -76,7 +78,7 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("JFrame");
         setTitle("Room Manager GUI");
-        setPreferredSize(new java.awt.Dimension(650, 875));
+        setPreferredSize(new java.awt.Dimension(650, 895));
         setResizable(false);
 
         tblRooms.setModel(new javax.swing.table.DefaultTableModel(
@@ -112,13 +114,16 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
         lblRooms.setText("Rooms:");
         lblBookings.setText("Bookings:");
 
-        btnAvailability.setText("Change Room Availability");
-
-        btnSearch.setText("Search Rooms");
         btnAdd.setText("Add Room");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
+            }
+        });
+        btnChangeAvailability.setText("Change Room Availability");
+        btnChangeAvailability.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangeAvailabilityActionPerformed(evt);
             }
         });
         btnRemove.setText("Remove Room");
@@ -127,10 +132,17 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
                 btnRemoveActionPerformed(evt);
             }
         });
+        btnSearch.setText("Search Rooms");
         btnTermDates.setText("Configure Term Dates");
         btnTermDates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTermDatesActionPerformed(evt);
+            }
+        });
+        btnViewAvailability.setText("View Room Availability");
+        btnViewAvailability.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAvailabilityActionPerformed(evt);
             }
         });
 
@@ -144,20 +156,22 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
                                         .addComponent(spRooms, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
                                         .addComponent(spBookings, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnAdd)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(btnRemove)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnSearch))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(lblRooms)
-                                                        .addComponent(lblBookings)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(btnAvailability)
+                                                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnTermDates)))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                                                .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(lblRooms)
+                                                                .addComponent(lblBookings)
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                                                .addComponent(btnTermDates, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                .addComponent(btnChangeAvailability, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(btnViewAvailability))))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -174,19 +188,27 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnAdd)
-                                        .addComponent(btnRemove)
-                                        .addComponent(btnSearch))
+                                        .addComponent(btnRemove))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btnAvailability)
-                                        .addComponent(btnTermDates))
+                                        .addComponent(btnChangeAvailability)
+                                        .addComponent(btnViewAvailability))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnTermDates)
+                                        .addComponent(btnSearch))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
         pack();
     }
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {
         new AddRoomGUI(roomTable, bookingTable, termTable).setVisible(true);
+    }
+
+    private void btnChangeAvailabilityActionPerformed(java.awt.event.ActionEvent evt) {
+        new ChangeAvailabilityGUI(roomTable, bookingTable, termTable).setVisible(true);
     }
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,6 +217,10 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
 
     private void btnTermDatesActionPerformed(java.awt.event.ActionEvent evt) {
         new TermDatesGUI(roomTable, bookingTable, termTable).setVisible(true);
+    }
+
+    private void btnViewAvailabilityActionPerformed(java.awt.event.ActionEvent evt) {
+        new ViewAvailabilityGUI(roomTable, bookingTable, termTable).setVisible(true);
     }
 
     @Override

@@ -36,10 +36,10 @@ public class DeleteBookingGUI extends javax.swing.JFrame implements Runnable, Ob
     }
 
     private void initGUI() {
-        lblBookingID = new javax.swing.JLabel();
-        tfBookingID = new javax.swing.JTextField();
         btnCancel = new javax.swing.JButton();
         btnConfirm = new javax.swing.JButton();
+        lblBookingID = new javax.swing.JLabel();
+        tfBookingID = new javax.swing.JTextField();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setName("JFrame");
