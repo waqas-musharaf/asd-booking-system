@@ -133,6 +133,11 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
             }
         });
         btnSearch.setText("Search Rooms");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
         btnTermDates.setText("Configure Term Dates");
         btnTermDates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,6 +218,11 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {
         new RemoveRoomGUI(roomTable, bookingTable, termTable).setVisible(true);
+    }
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
+        SearchPanel search = new SearchPanel();
+        int input = JOptionPane.showConfirmDialog(null, search, "Search Rooms" , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
     }
 
     private void btnTermDatesActionPerformed(java.awt.event.ActionEvent evt) {
