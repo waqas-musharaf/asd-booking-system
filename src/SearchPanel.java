@@ -1,5 +1,13 @@
+import javafx.util.Pair;
+import org.jdatepicker.impl.DateComponentFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.Properties;
 
 public class SearchPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cbDAvailability;
@@ -15,10 +23,11 @@ public class SearchPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblType;
     private javax.swing.JTextField tfID;
     private javax.swing.JTextField tfName;
-    private javax.swing.JTextField tfSAvailability;
     private javax.swing.JTextField tfSize;
     private javax.swing.JTextField tfStatus;
-
+    private JDatePickerImpl dpSAvailability;
+    private Properties p;
+    private LocalDate selectedDate;
 
     public SearchPanel() {
         super();
@@ -36,7 +45,6 @@ public class SearchPanel extends javax.swing.JPanel {
 
         tfID = new javax.swing.JTextField();
         tfName = new javax.swing.JTextField();
-        tfSAvailability = new javax.swing.JTextField();
         tfSize = new javax.swing.JTextField();
         tfStatus = new javax.swing.JTextField();
         cbDAvailability = new javax.swing.JComboBox<>();
@@ -44,24 +52,28 @@ public class SearchPanel extends javax.swing.JPanel {
         cbSize = new javax.swing.JComboBox<>();
         cbType = new javax.swing.JComboBox<>();
 
-        cbDAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Weekday PM", "Weekend AM", "Weekend PM", "Holiday AM", "Holiday PM" }));
-        cbSAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "AM", "PM" }));
-        cbSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Equals", "Is Less Than", "Is More Than" }));
-        cbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Computer Lab", "Tutorial Room", "Lecture Theatre" }));
+        cbDAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"", "Weekday PM", "Weekend AM", "Weekend PM", "Holiday AM", "Holiday PM"}));
+        cbSAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"", "AM", "PM" }));
+        cbSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"", "Equals", "Is Less Than", "Is More Than"}));
+        cbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"", "Computer Lab", "Tutorial Room", "Lecture Theatre"}));
 
-        tfSAvailability.setEditable(false);
-        tfSize.setEditable(false);
-
-        cbSAvailability.addActionListener(new ActionListener() {
+        p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        // Set default date in case of no click
+        selectedDate = LocalDate.of(1970, 01, 01);
+        dpSAvailability = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
+        dpSAvailability.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cbSAvailability.getSelectedIndex() == 0) {
-                    tfSAvailability.setEditable(false);
-                } else {
-                    tfSAvailability.setEditable(true);
-                }
+                selectedDate = LocalDate.of(dpSAvailability.getModel().getYear(),
+                        dpSAvailability.getModel().getMonth() + 1,
+                        dpSAvailability.getModel().getDay());
             }
         });
+
+        tfSize.setEditable(false);
         cbSize.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -90,7 +102,7 @@ public class SearchPanel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(tfSAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(dpSAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(cbSAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -132,7 +144,7 @@ public class SearchPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(lblSAvailability)
-                                        .addComponent(tfSAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(dpSAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(cbSAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -140,5 +152,17 @@ public class SearchPanel extends javax.swing.JPanel {
                                         .addComponent(tfStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+    }
+
+    public Search getSnapshot() {
+        return new Search(tfID.getText(),
+                tfName.getText(),
+                new Pair<Integer, String>(cbSize.getSelectedIndex(),
+                        tfSize.getText()),
+                cbType.getSelectedIndex(),
+                cbDAvailability.getSelectedIndex(),
+                new Pair<LocalDate, Integer>(selectedDate,
+                        cbSAvailability.getSelectedIndex()),
+                tfStatus.getText());
     }
 }

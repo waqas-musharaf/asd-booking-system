@@ -1,8 +1,13 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.stream.Collectors;
 
 public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer {
     private javax.swing.JButton btnAdd;
@@ -17,6 +22,7 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
     private javax.swing.JScrollPane spRooms;
     private javax.swing.JTable tblBookings;
     private javax.swing.JTable tblRooms;
+    private boolean searchActive;
 
     private RoomTable roomTable;
     private BookingTable bookingTable;
@@ -58,19 +64,19 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
         spRooms = new javax.swing.JScrollPane();
         tblBookings = new javax.swing.JTable() {
             @Override
-            public String getToolTipText (MouseEvent e) {
+            public String getToolTipText(MouseEvent e) {
                 int r = rowAtPoint(e.getPoint());
                 int c = columnAtPoint(e.getPoint());
-                Object value = getValueAt(r,c);
+                Object value = getValueAt(r, c);
                 return value == null ? null : value.toString();
             }
         };
         tblRooms = new javax.swing.JTable() {
             @Override
-            public String getToolTipText (MouseEvent e) {
+            public String getToolTipText(MouseEvent e) {
                 int r = rowAtPoint(e.getPoint());
                 int c = columnAtPoint(e.getPoint());
-                Object value = getValueAt(r,c);
+                Object value = getValueAt(r, c);
                 return value == null ? null : value.toString();
             }
         };
@@ -133,6 +139,7 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
             }
         });
         btnSearch.setText("Search Rooms");
+        searchActive = false;
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
@@ -221,8 +228,132 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
     }
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
-        SearchPanel search = new SearchPanel();
-        int input = JOptionPane.showConfirmDialog(null, search, "Search Rooms" , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+        if (searchActive) {
+            searchActive = false;
+            btnSearch.setText("Search Rooms");
+            updateRoomTable();
+        } else {
+            SearchPanel search = new SearchPanel();
+            int input = JOptionPane.showConfirmDialog(null, search, "Search Rooms", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+            if (input == 0) {
+                if (!searchActive) {
+                    searchActive = true;
+                    btnSearch.setText("Clear Search");
+                }
+                ArrayList<Room> table = roomTable.getTable();
+                Search snapshot = search.getSnapshot();
+                ArrayList<String> warnings = new ArrayList<>();
+
+                if (!snapshot.getId().equals("")) {
+                    int id = intTryParse(snapshot.getId(), Integer.MIN_VALUE);
+                    if (id != Integer.MIN_VALUE) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getRoomId() == id).collect(Collectors.toList());
+                    } else {
+                        warnings.add("Provided ID value was invalid. ID filter was not applied.");
+                    }
+                }
+
+                if (!snapshot.getName().equals("")) {
+                    table = (ArrayList<Room>) table.stream().filter(r -> r.getRoomName().toLowerCase().contains(snapshot.getName().toLowerCase())).collect(Collectors.toList());
+                }
+
+                if (!(snapshot.getSize().getKey() == 0)) {
+                    if (!snapshot.getSize().getValue().equals("")) {
+                        int size = intTryParse(snapshot.getSize().getValue(), Integer.MIN_VALUE);
+                        if (size != Integer.MIN_VALUE) {
+                            if (snapshot.getSize().getKey() == 1) {
+                                table = (ArrayList<Room>) table.stream().filter(r -> r.getSize() == size).collect(Collectors.toList());
+                            } else if (snapshot.getSize().getKey() == 2) {
+                                table = (ArrayList<Room>) table.stream().filter(r -> r.getSize() < size).collect(Collectors.toList());
+                            } else if (snapshot.getSize().getKey() == 3) {
+                                table = (ArrayList<Room>) table.stream().filter(r -> r.getSize() > size).collect(Collectors.toList());
+                            }
+                        } else {
+                            warnings.add("Provided size value was invalid. Size filter was not applied.");
+                        }
+                    } else {
+                        warnings.add("No size value provided. Size filter was not applied.");
+                    }
+                }
+
+                if (!(snapshot.getType() == 0)) {
+                    if (snapshot.getType() == 1) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getType().equals("Computer Lab")).collect(Collectors.toList());
+                    } else if (snapshot.getType() == 2) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getType().equals("Tutorial Room")).collect(Collectors.toList());
+                    } else if (snapshot.getType() == 3) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getType().equals("Lecture Theatre")).collect(Collectors.toList());
+                    }
+                }
+
+                if (!(snapshot.getDAvailability() == 0)) {
+                    if (snapshot.getDAvailability() == 1) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getAvailability().contains("Weekday PM")).collect(Collectors.toList());
+                    } else if (snapshot.getDAvailability() == 2) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getAvailability().contains("Weekend AM")).collect(Collectors.toList());
+                    } else if (snapshot.getDAvailability() == 3) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getAvailability().contains("Weekend PM")).collect(Collectors.toList());
+                    } else if (snapshot.getDAvailability() == 4) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getAvailability().contains("Holiday AM")).collect(Collectors.toList());
+                    } else if (snapshot.getDAvailability() == 5) {
+                        table = (ArrayList<Room>) table.stream().filter(r -> r.getAvailability().contains("Holiday PM")).collect(Collectors.toList());
+                    }
+                }
+
+                if (!snapshot.getSAvailability().getKey().equals(LocalDate.of(1970, 01, 01))) {
+                    LocalDate date = snapshot.getSAvailability().getKey();
+                    LocalDateTime dateAM = LocalDateTime.of(date, LocalTime.MIN.plusHours(9));
+                    LocalDateTime datePM = LocalDateTime.of(date, LocalTime.MIN.plusHours(16));
+
+                    if (snapshot.getSAvailability().getValue() == 0) {
+                        for (Room r : table) {
+                            if (bookingTable.checkBookingExists(r.roomId, dateAM) && bookingTable.checkBookingExists(r.roomId, datePM)) {
+                                table = (ArrayList<Room>) table.stream().filter(r1 -> r1.getRoomId() != r.roomId).collect(Collectors.toList());
+                            }
+                            if (((date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7) && !r.getAvailability().contains("Weekend")) ||
+                                    ((termTable.hasDate(date)) && !r.getAvailability().contains("Weekday")) ||
+                                    (!(termTable.hasDate(date)) && !r.getAvailability().contains("Holiday"))) {
+                                table = (ArrayList<Room>) table.stream().filter(r1 -> r1.getRoomId() != r.roomId).collect(Collectors.toList());
+                            }
+                        }
+                    } else if (snapshot.getSAvailability().getValue() == 1) {
+                        for (Room r : table) {
+                            if (bookingTable.checkBookingExists(r.roomId, dateAM)) {
+                                table = (ArrayList<Room>) table.stream().filter(r1 -> r1.getRoomId() != r.roomId).collect(Collectors.toList());
+                            }
+                            if (((date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7) && !r.getAvailability().contains("Weekend AM")) ||
+                                    ((termTable.hasDate(date)) && !r.getAvailability().contains("Weekday AM")) ||
+                                    (!(termTable.hasDate(date)) && !r.getAvailability().contains("Holiday AM"))) {
+                                table = (ArrayList<Room>) table.stream().filter(r1 -> r1.getRoomId() != r.roomId).collect(Collectors.toList());
+                            }
+                        }
+                    } else if (snapshot.getSAvailability().getValue() == 2) {
+                        for (Room r : table) {
+                            if (bookingTable.checkBookingExists(r.roomId, datePM)) {
+                                table = (ArrayList<Room>) table.stream().filter(r1 -> r1.getRoomId() != r.roomId).collect(Collectors.toList());
+                            }
+                            if (((date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7) && !r.getAvailability().contains("Weekend PM")) ||
+                                    ((termTable.hasDate(date)) && !r.getAvailability().contains("Weekday PM")) ||
+                                    (!(termTable.hasDate(date)) && !r.getAvailability().contains("Holiday PM"))) {
+                                table = (ArrayList<Room>) table.stream().filter(r1 -> r1.getRoomId() != r.roomId).collect(Collectors.toList());
+                            }
+                        }
+                    }
+                }
+
+                if (!snapshot.getStatus().equals("")) {
+                    table = (ArrayList<Room>) table.stream().filter(r -> r.getStatus().toLowerCase().contains(snapshot.getStatus().toLowerCase())).collect(Collectors.toList());
+                }
+
+                if(warnings.size() != 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "Warning:\n" + warnings.stream().collect(Collectors.joining("\n")),
+                            "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+                searchRoomTable(table);
+            }
+        }
     }
 
     private void btnTermDatesActionPerformed(java.awt.event.ActionEvent evt) {
@@ -240,20 +371,38 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
         updateTermTable();
     }
 
-    private void updateRoomTable() {
+    private void searchRoomTable(ArrayList<Room> table) {
         DefaultTableModel dtm = (DefaultTableModel) tblRooms.getModel();
         dtm.setRowCount(0);
-        for (int i = 0; i < roomTable.getTable().size(); i++) {
+        for (int i = 0; i < table.size(); i++) {
             Object[] rowData = new Object[6];
-            rowData[0] = roomTable.getTable().get(i).getRoomId();
-            rowData[1] = roomTable.getTable().get(i).getRoomName();
-            rowData[2] = roomTable.getTable().get(i).getSize();
-            rowData[3] = roomTable.getTable().get(i).getType();
-            rowData[4] = roomTable.getTable().get(i).getAvailability();
-            rowData[5] = roomTable.getTable().get(i).getStatus();
+            rowData[0] = table.get(i).getRoomId();
+            rowData[1] = table.get(i).getRoomName();
+            rowData[2] = table.get(i).getSize();
+            rowData[3] = table.get(i).getType();
+            rowData[4] = table.get(i).getAvailability();
+            rowData[5] = table.get(i).getStatus();
             dtm.addRow(rowData);
         }
         tblRooms = new JTable(dtm);
+    }
+
+    private void updateRoomTable() {
+        if (!searchActive) {
+            DefaultTableModel dtm = (DefaultTableModel) tblRooms.getModel();
+            dtm.setRowCount(0);
+            for (int i = 0; i < roomTable.getTable().size(); i++) {
+                Object[] rowData = new Object[6];
+                rowData[0] = roomTable.getTable().get(i).getRoomId();
+                rowData[1] = roomTable.getTable().get(i).getRoomName();
+                rowData[2] = roomTable.getTable().get(i).getSize();
+                rowData[3] = roomTable.getTable().get(i).getType();
+                rowData[4] = roomTable.getTable().get(i).getAvailability();
+                rowData[5] = roomTable.getTable().get(i).getStatus();
+                dtm.addRow(rowData);
+            }
+            tblRooms = new JTable(dtm);
+        }
     }
 
     private void updateBookingTable() {
@@ -274,5 +423,13 @@ public class ManagerGUI extends javax.swing.JFrame implements Runnable, Observer
 
     private void updateTermTable() {
         termTable.equals(termTable.getTable());
+    }
+
+    public int intTryParse(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 }
