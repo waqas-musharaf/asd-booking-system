@@ -13,6 +13,7 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
     private javax.swing.JButton btnBook;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnViewAvailability;
     private javax.swing.JLabel lblBookings;
     private javax.swing.JLabel lblRooms;
     private javax.swing.JScrollPane spBookings;
@@ -52,6 +53,7 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
         btnBook = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
+        btnViewAvailability = new javax.swing.JButton();
         lblBookings = new javax.swing.JLabel();
         lblRooms = new javax.swing.JLabel();
         spBookings = new javax.swing.JScrollPane();
@@ -78,7 +80,7 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("JFrame");
         setTitle("Booking Clerk GUI");
-        setPreferredSize(new java.awt.Dimension(650, 830));
+        setPreferredSize(new java.awt.Dimension(650, 865));
         setResizable(false);
 
         tblRooms.setModel(new javax.swing.table.DefaultTableModel(
@@ -133,6 +135,12 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
                 btnSearchActionPerformed(evt);
             }
         });
+        btnViewAvailability.setText("View Room Availability");
+        btnViewAvailability.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAvailabilityActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,11 +157,17 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
                                                         .addComponent(lblBookings))
                                                 .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(btnBook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnViewAvailability, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -161,17 +175,20 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addComponent(lblRooms)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(spRooms, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(1, 1, 1)
                                 .addComponent(lblBookings)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(spBookings, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnBook)
-                                        .addComponent(btnSearch)
                                         .addComponent(btnDelete))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnViewAvailability)
+                                        .addComponent(btnSearch))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -313,6 +330,10 @@ public class ClerkGUI extends javax.swing.JFrame implements Runnable, Observer {
                 searchRoomTable(table);
             }
         }
+    }
+
+    private void btnViewAvailabilityActionPerformed(java.awt.event.ActionEvent evt) {
+        new ViewAvailabilityGUI(roomTable, bookingTable, termTable).setVisible(true);
     }
 
     @Override
