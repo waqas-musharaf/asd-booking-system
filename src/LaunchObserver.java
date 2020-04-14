@@ -1,3 +1,9 @@
+import Data_Structures.BookingTable;
+import Data_Structures.RoomTable;
+import Data_Structures.TermTable;
+import Interfaces.ClerkGUI;
+import Interfaces.ManagerGUI;
+
 public class LaunchObserver {
     public static void main(String args[]){
 
@@ -6,8 +12,8 @@ public class LaunchObserver {
         TermTable termTable = new TermTable();
 
         ClerkGUI clerkGUI1 = new ClerkGUI(roomTable, bookingTable, termTable);
-        //ClerkGUI clerkGUI2 = new ClerkGUI(roomTable, bookingTable, termTable);
-        //ClerkGUI clerkGUI3 = new ClerkGUI(roomTable, bookingTable, termTable);
+        //Interfaces.ClerkGUI clerkGUI2 = new Interfaces.ClerkGUI(roomTable, bookingTable, termTable);
+        //Interfaces.ClerkGUI clerkGUI3 = new Interfaces.ClerkGUI(roomTable, bookingTable, termTable);
         ManagerGUI managerGUI = new ManagerGUI(roomTable, bookingTable, termTable);
 
         Thread ct1 = new Thread(clerkGUI1);
