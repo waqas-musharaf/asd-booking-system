@@ -1,6 +1,6 @@
 package Interfaces;
 
-import Data_Structures.Search;
+import Objects.Search;
 
 import javafx.util.Pair;
 import org.jdatepicker.impl.DateComponentFormatter;

@@ -1,9 +1,9 @@
 package Interfaces;
 
-import Data_Structures.Booking;
-import Data_Structures.BookingTable;
-import Data_Structures.RoomTable;
-import Data_Structures.TermTable;
+import Objects.Booking;
+import Objects.BookingTable;
+import Objects.RoomTable;
+import Objects.TermTable;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;

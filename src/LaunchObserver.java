@@ -1,6 +1,6 @@
-import Data_Structures.BookingTable;
-import Data_Structures.RoomTable;
-import Data_Structures.TermTable;
+import Objects.BookingTable;
+import Objects.RoomTable;
+import Objects.TermTable;
 import Interfaces.ClerkGUI;
 import Interfaces.ManagerGUI;
 

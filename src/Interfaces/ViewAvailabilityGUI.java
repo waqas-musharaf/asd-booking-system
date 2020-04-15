@@ -1,9 +1,9 @@
 package Interfaces;
 
-import Data_Structures.BookingTable;
-import Data_Structures.Room;
-import Data_Structures.RoomTable;
-import Data_Structures.TermTable;
+import Objects.BookingTable;
+import Objects.Room;
+import Objects.RoomTable;
+import Objects.TermTable;
 
 import javax.swing.*;
 import java.time.LocalDate;

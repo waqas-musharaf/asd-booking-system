@@ -1,6 +1,6 @@
 package Interfaces;
 
-import Data_Structures.*;
+import Objects.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
